@@ -13,4 +13,4 @@ And caching
 
 And WP-Fail2ban
 
-It is an example of a repo configured for a users who is using these panel features. After successful deploy the scripts will sync all toggles against the state of the sites plugins. 
+It is an example of a repo configured for someone who is using these panel features. After successful deploy the scripts will sync all toggles against the state of the sites plugins. 
