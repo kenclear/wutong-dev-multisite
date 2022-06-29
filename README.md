@@ -50,6 +50,8 @@ The root scripts can be useful for running scripts across the server and microse
 
 The system user scripts can be useful for running system user functionality, php, wp-cli etc.
 
+Remember to add the correct path to wp core files for wp-cli commands, in the case of a full deploy this would be the directory above.
+
 ### Release Directory Retention
 
 ```
