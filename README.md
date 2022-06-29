@@ -139,6 +139,194 @@ All sites require the wp-cli-login-server.php mu plugin for SSO to function. If 
 After deploy, a function runs and checks for all of the above and will sync the state to the app with the site set as the source of truth. If anything is missing (apart from the login server)
 we will just adjust the app data to match.
 
+## Themes
+
+This repo is configured with all base core themes from `twentyten` to `twentytwentytwo` 
+
+```shell
+wp-content/themes/twentyeleven
+wp-content/themes/twentyfifteen
+wp-content/themes/twentyfourteen
+wp-content/themes/twentynineteen
+wp-content/themes/twentyseventeen
+wp-content/themes/twentysixteen
+wp-content/themes/twentyten
+wp-content/themes/twentythirteen
+wp-content/themes/twentytwelve
+wp-content/themes/twentytwenty
+wp-content/themes/twentytwentyone
+wp-content/themes/twentytwentytwo
+```
+
+## Directory Structure Changes
+
+### Directory Structure when Git Integration is enabled
+
+When you first enable the Git Integration Connection for a site, we run a function that modifies the Site's directory file structure.
+```
+root@10alpha:/var/www/test.site# ls -la
+total 52
+drwxr-xr-x+ 9 test10350 test10350 4096 Jun 29 13:03 .
+drwxr-xr-x+ 6 root      root      4096 Jun 29 13:02 ..
+drwxr--r--  3 root      root      4096 Jun 29 13:02 .duplicacy
+-rw-r--r--  1 test10350 test10350  281 Jun 29 13:02 .user.ini
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:02 dns
+lrwxrwxrwx  1 root      root        46 Jun 29 13:03 htdocs -> /var/www/test.site/releases/release-1656507770
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:03 logs
+drwxr-xr-x  3 test10350 test10350 4096 Jun 29 13:02 modsec
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:02 nginx
+drwxr-xr-x  4 test10350 test10350 4096 Jun 29 13:02 public
+drwxr-xr-x  3 test10350 test10350 4096 Jun 29 13:02 releases
+-rw-r--r--  1 test10350 test10350  120 Jun 29 13:02 user-configs.php
+-rw-r--r--  1 test10350 test10350 4189 Jun 29 13:02 wp-config.php
+```
+
+A `/var/www/{site.domain}/releases` diretory is created, and within that a release `/var/www/{site.domain}/release-{EPOCH}` subdirectory.
+
+The site's files and directories are moved into the release directory, and then `htdocs` is symlinked to the release directory.
+
+The site `wp-config.php` file is symlinked into the `releases` directory so that is available.
+```
+root@10alpha:/var/www/test.site# ls -la
+total 20
+drwxr-xr-x  5 test10350 test10350 4096 Jun 29 13:16 .
+drwxr-xr-x+ 9 test10350 test10350 4096 Jun 29 13:16 ..
+drwxr-xr-x  5 test10350 test10350 4096 Jun 29 13:03 release-1656507770
+lrwxrwxrwx  1 root      root        32 Jun 29 13:16 wp-config.php -> /var/www/test.site/wp-config.php
+```
+
+You may have noticed the `.user.ini` file is now located in `/var/www/{site.domain}/.user.ini`, that is because it is now symlinked into the current release:
+```
+root@10alpha:/var/www/test.site# ls -la htdocs/.user.ini
+lrwxrwxrwx 1 root root 28 Jun 29 13:03 htdocs/.user.ini -> /var/www/test.site/.user.ini
+```
+or
+```
+root@10alpha:/var/www/test.site# ls -la /var/www/test.site/releases/release-1656507770/.user.ini
+lrwxrwxrwx 1 root root 28 Jun 29 13:03 /var/www/test.site/releases/release-1656507770/.user.ini -> /var/www/test.site/.user.ini
+```
+(If you are using OLS stack, this is also the case for the `.htaccess` file)
+
+You will have also noticed the `/var/www/{site.domain}/public` directory. This directory is now for all public files, ie your uploads directory is symlinked here.
+Files in this directory are not version controlled and they are not immutable.
+```
+root@10alpha:/var/www/test.site# ls -la htdocs/wp-content/uploads
+lrwxrwxrwx 1 root root 25 Jun 29 13:03 htdocs/wp-content/uploads -> /var/www/test.site/public
+```
+
+At this point:
+- The site's directory structure has been adapted for Git deployments, but the all files in all directories are the original files, your Git repo has not yet been deployed.
+- The structure is also not immutable, all the files are owned by the system user, and file modifications are still allowed.
+
+```
+root@10alpha:/var/www/test.site# ls -la /var/www/test.site/releases/release-1656507770
+total 220
+drwxr-xr-x  5 test10350 test10350  4096 Jun 29 13:03 .
+drwxr-xr-x  7 test10350 test10350  4096 Jun 29 13:28 ..
+lrwxrwxrwx  1 root      root         28 Jun 29 13:03 .user.ini -> /var/www/test.site/.user.ini
+-rw-r--r--  1 test10350 test10350   405 Jun 29 13:02 index.php
+-rw-r--r--  1 test10350 test10350 19915 Jun 29 13:02 license.txt
+-rw-r--r--  1 test10350 test10350  7401 Jun 29 13:02 readme.html
+-rw-r--r--  1 test10350 test10350  7165 Jun 29 13:02 wp-activate.php
+drwxr-xr-x  9 test10350 test10350  4096 Jun 29 13:02 wp-admin
+-rw-r--r--  1 test10350 test10350   351 Jun 29 13:02 wp-blog-header.php
+-rw-r--r--  1 test10350 test10350  2338 Jun 29 13:02 wp-comments-post.php
+-rw-r--r--  1 test10350 test10350  3001 Jun 29 13:02 wp-config-sample.php
+drwxr-xr-x  6 test10350 test10350  4096 Jun 29 13:03 wp-content
+-rw-r--r--  1 test10350 test10350  3943 Jun 29 13:02 wp-cron.php
+drwxr-xr-x 26 test10350 test10350 12288 Jun 29 13:02 wp-includes
+-rw-r--r--  1 test10350 test10350  2494 Jun 29 13:02 wp-links-opml.php
+-rw-r--r--  1 test10350 test10350  3973 Jun 29 13:02 wp-load.php
+-rw-r--r--  1 test10350 test10350 48498 Jun 29 13:02 wp-login.php
+-rw-r--r--  1 test10350 test10350  8577 Jun 29 13:02 wp-mail.php
+-rw-r--r--  1 test10350 test10350 23706 Jun 29 13:02 wp-settings.php
+-rw-r--r--  1 test10350 test10350 32051 Jun 29 13:02 wp-signup.php
+-rw-r--r--  1 test10350 test10350  4748 Jun 29 13:02 wp-trackback.php
+-rw-r--r--  1 test10350 test10350  3236 Jun 29 13:02 xmlrpc.php
+```
+
+### Directory Structure when Git Repo is deployed
+
+Once you click Deploy, or if you have push to deploy enabled and push an update, a deploy will be triggered on your server.
+
+After the deploy finishes, your git repo will have been pulled into a new directory, scripts will have run and if all passed, then the directory symlinks will have been updated.
+However the basic directory structure will be as above.
+```
+root@10alpha:/var/www/test.site# ls -la
+drwxr-xr-x+ 9 test10350 test10350 4096 Jun 29 13:31 .
+drwxr-xr-x+ 6 root      root      4096 Jun 29 13:02 ..
+drwxr--r--  3 root      root      4096 Jun 29 13:02 .duplicacy
+-rw-r--r--  1 test10350 test10350  281 Jun 29 13:02 .user.ini
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:02 dns
+lrwxrwxrwx  1 root      root        46 Jun 29 13:31 htdocs -> /var/www/test.site/releases/release-1656509495
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:31 logs
+drwxr-xr-x  3 test10350 test10350 4096 Jun 29 13:02 modsec
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:02 nginx
+drwxr-xr-x  4 test10350 test10350 4096 Jun 29 13:02 public
+drwxr-xr-x  8 test10350 test10350 4096 Jun 29 13:31 releases
+-rw-r--r--  1 test10350 test10350  120 Jun 29 13:02 user-configs.php
+-rw-r--r--  1 test10350 test10350 4321 Jun 29 13:31 wp-config.php
+```
+
+But now the site WordPress files and directories will be root owned:
+```
+root@10alpha:/var/www/test.site# ls -la ls -la /var/www/test.site/releases/release-1656509495
+total 232
+drwxr-xr-x  7 root      root       4096 Jun 29 13:31 .
+drwxr-xr-x  8 test10350 test10350  4096 Jun 29 13:31 ..
+drwxr-xr-x  8 root      root       4096 Jun 29 13:31 .git
+drwxr-xr-x  3 root      root       4096 Jun 29 13:31 .github
+-rw-r--r--  1 root      root         30 Jun 29 13:31 README.md
+-rw-r--r--  1 root      root        405 Jun 29 13:31 index.php
+-rw-r--r--  1 root      root      19915 Jun 29 13:31 license.txt
+-rw-r--r--  1 root      root       7401 Jun 29 13:31 readme.html
+-rw-r--r--  1 root      root       7165 Jun 29 13:31 wp-activate.php
+drwxr-xr-x  9 root      root       4096 Jun 29 13:31 wp-admin
+-rw-r--r--  1 root      root        351 Jun 29 13:31 wp-blog-header.php
+-rw-r--r--  1 root      root       2338 Jun 29 13:31 wp-comments-post.php
+-rw-r--r--  1 root      root       3001 Jun 29 13:31 wp-config-sample.php
+drwxr-xr-x  4 root      root       4096 Jun 29 13:31 wp-content
+-rw-r--r--  1 root      root       3943 Jun 29 13:31 wp-cron.php
+drwxr-xr-x 26 root      root      12288 Jun 29 13:31 wp-includes
+-rw-r--r--  1 root      root       2494 Jun 29 13:31 wp-links-opml.php
+-rw-r--r--  1 root      root       3973 Jun 29 13:31 wp-load.php
+-rw-r--r--  1 root      root      48498 Jun 29 13:31 wp-login.php
+-rw-r--r--  1 root      root       8577 Jun 29 13:31 wp-mail.php
+-rw-r--r--  1 root      root      23706 Jun 29 13:31 wp-settings.php
+-rw-r--r--  1 root      root      32051 Jun 29 13:31 wp-signup.php
+-rw-r--r--  1 root      root       4748 Jun 29 13:31 wp-trackback.php
+-rw-r--r--  1 root      root       3236 Jun 29 13:31 xmlrpc.php
+```
+```
+root@10alpha:/var/www/test.site/htdocs/wp-content# ls -la
+total 20
+drwxr-xr-x  4 root root 4096 Jun 29 13:31 .
+drwxr-xr-x  7 root root 4096 Jun 29 13:31 ..
+-rw-r--r--  1 root root   28 Jun 29 13:31 index.php
+drwxr-xr-x  2 root root 4096 Jun 29 13:31 plugins
+drwxr-xr-x 14 root root 4096 Jun 29 13:31 themes
+lrwxrwxrwx  1 root root   25 Jun 29 13:31 uploads -> /var/www/test.site/public
+```
+Apart from the contents of your uploads directory, which will still be owned by the site system user:
+```
+root@10alpha:/var/www/test.site/htdocs/wp-content/uploads# ls -la
+total 16
+drwxr-xr-x  4 test10350 test10350 4096 Jun 29 13:02 .
+drwxr-xr-x+ 9 test10350 test10350 4096 Jun 29 13:31 ..
+drwxr-xr-x  3 test10350 test10350 4096 Jun 29 13:02 2022
+drwxr-xr-x  2 test10350 test10350 4096 Jun 29 13:02 nginx-helper
+```
+
+Your site `/var/www/{site.domain}/wp-config.php` will also have been updated to include:
+```
+/* GridPane Git Full Immutable Start */
+define('DISALLOW_FILE_MODS', true);
+/* GridPane Git Full Immutable End */
+```
+To further restrict any file modifications from within the app.
+
+If you disable the git integration for your site, then the directory and file structure will be returned to GridPane normal using the latest files from the current release.
+
 
 
 
