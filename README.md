@@ -345,6 +345,15 @@ To further restrict any file modifications from within the app.
 
 If you disable the git integration for your site, then the directory and file structure will be returned to GridPane normal using the latest files from the current release.
 
+# Note
+
+Currently we configure a site for git deployments and check the repo, but the git repo is not deployed on the site until users trigger a deploy.
+
+We understand this is superfluous and intend to combine this into a single action
+- convert site and run first deploy
+
+
+
 
 
 
