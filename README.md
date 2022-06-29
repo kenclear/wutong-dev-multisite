@@ -50,6 +50,22 @@ The root scripts can be useful for running scripts across the server and microse
 
 The system user scripts can be useful for running system user functionality, php, wp-cli etc.
 
+### Release Directory Retention
+
+```
+.gpconfig/keep.releases
+```
+
+This repo contains this file, the contents of the file can be an `integer` only, and the integer must be greater than or equal to `3` - this represents the minimum number of releases we will allow you to retain.
+
+This `integer` is the number of releases that the system will retain in the following directory:
+```
+/var/www/{site.domain}/releases
+```
+
+Please see below for details of the releases and release directory naming convention.
+
+
 ## Plugins
 
 Based on the sites GridPane configuration
@@ -187,7 +203,7 @@ The site's files and directories are moved into the release directory, and then 
 
 The site `wp-config.php` file is symlinked into the `releases` directory so that is available.
 ```
-root@10alpha:/var/www/test.site# ls -la
+root@10alpha:/var/www/test.site# ls -la releases
 total 20
 drwxr-xr-x  5 test10350 test10350 4096 Jun 29 13:16 .
 drwxr-xr-x+ 9 test10350 test10350 4096 Jun 29 13:16 ..
