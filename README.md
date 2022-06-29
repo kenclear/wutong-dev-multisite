@@ -288,7 +288,7 @@ drwxr-xr-x  8 test10350 test10350 4096 Jun 29 13:31 releases
 
 But now the site WordPress files and directories will be root owned:
 ```
-root@10alpha:/var/www/test.site# ls -la ls -la /var/www/test.site/releases/release-1656509495
+root@10alpha:/var/www/test.site# ls -la /var/www/test.site/releases/release-1656509495
 total 232
 drwxr-xr-x  7 root      root       4096 Jun 29 13:31 .
 drwxr-xr-x  8 test10350 test10350  4096 Jun 29 13:31 ..
