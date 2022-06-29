@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Server Wide Script
-# - runs before new files are deployed to site
-# - runs from the release/.gpconfig directory
-# - runs as ROOT user
+# Server level access
+# - Runs before files have been deployed 
+# - Runs as root user
+# - Runs from within site /.gpconfig dir
