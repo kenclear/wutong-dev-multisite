@@ -371,7 +371,7 @@ Staging
 - destination site is git full deployed
   - staging should be limited to only db pushes 
 
-Panel Toggle features
+Panel Toggle Features
 - Currently if deploys include correct plugins to match the site panel toggles then the sync make sure toggles are right
 - But using toggles on panel to update site when configured for git full immutable is unpredictable
   - our mu plugins install because we do it via root and our own files on server - security and mailing
