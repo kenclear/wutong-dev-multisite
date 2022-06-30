@@ -343,7 +343,7 @@ To further restrict any file modifications from within the app.
 
 If you disable the git integration for your site, then the directory and file structure will be returned to GridPane normal using the latest files from the current release.
 
-# Note
+# Notes
 
 Directory structures - intermediary state
 - On enable we currently check the repo and then configure a sites directories for git deployments, but do not carry out an immediate deployment.
