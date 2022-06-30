@@ -70,11 +70,6 @@ Please see below for details of the releases and release directory naming conven
 
 ## Plugins
 
-Based on the sites GridPane configuration
-- Nginx Page Caching
-- Redis Object Caching
-- WP Fail2Ban integration active
-
 Relevant to the site state in the app, this repo contains:
 
 ```shell
@@ -83,6 +78,11 @@ wp-content/plugins/nginx-helper
 wp-content/plugins/wp-fail2ban
 wp-content/object-cache.php     <-- drop in from gridpane-redis-object-cache
 ```
+
+These would be required based on the sites GridPane App configuration of:
+- Nginx Page Caching active
+- Redis Object Caching active
+- WP Fail2Ban integration active
 
 #### Plugin links
 
