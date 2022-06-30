@@ -349,7 +349,7 @@ If you disable the git integration for your site, then the directory and file st
 
 Currently we configure a site for git deployments and check the repo, but the git repo is not deployed on the site until users trigger a deploy.
 
-We understand this is superfluous and intend to combine this into a single action
+We understand this is superfluous and intend to combine this into a single action, however at beta stage it allows us to test and check each stage separately.
 - convert site and run first deploy
 
 
