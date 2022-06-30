@@ -70,8 +70,7 @@ Please see below for details of the releases and release directory naming conven
 
 ## Plugins
 
-Relevant to the site state in the app, this repo contains:
-
+Relevant to the GridPane, this repo contains:
 ```shell
 wp-content/plugins/gridpane-redis-object-cache
 wp-content/plugins/nginx-helper
