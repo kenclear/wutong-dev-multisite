@@ -105,18 +105,7 @@ If your site is using the WPFail2Ban integration in the Panel, then you will nee
 
 ## MU-Plugins
 
-Based on this site being configured with
-- Additional Security Settings
-  - Disable Emoji
-  - Disable RSS
-  - Disable Username Enumeration
-  - Block WP Scan Agent
-  - Block WP Version
-- Sendgrid SMTP integration active
-- SSO login active
-
-This repo contains:
-
+Relevant to the GridPane, this repo contains:
 ```shell
 wp-content/mu-plugins/gridpane-block-username-enumeration
 wp-content/mu-plugins/gridpane-block-wpscan-agent
@@ -134,6 +123,16 @@ wp-content/mu-plugins/mu-gridpane-nginx-cache-purger.php
 wp-content/mu-plugins/mu-gridpane-remove-wp-version.php
 wp-content/mu-plugins/wp-cli-login-server.php
 ```
+
+These would be required based on the sites GridPane App configuration of:
+- Additional Security Settings
+  - Disable Emoji active
+  - Disable RSS active
+  - Disable Username Enumeration active
+  - Block WP Scan Agent active
+  - Block WP Version active
+- Sendgrid SMTP integration active 
+- SSO login active
 
 #### MU Plugin links
 
