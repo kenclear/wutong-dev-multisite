@@ -73,9 +73,9 @@ Please see below for details of the releases and release directory naming conven
 Based on the sites GridPane configuration
 - Nginx Page Caching
 - Redis Object Caching
-- WP Fail2Ban integration active  
+- WP Fail2Ban integration active
 
-This repo contains:
+Relevant to the site state in the app, this repo contains:
 
 ```shell
 wp-content/plugins/gridpane-redis-object-cache
