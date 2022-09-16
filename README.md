@@ -1,4 +1,4 @@
-# gridpane-wordpress-template-all-plugins...
+# gridpane-wordpress-template-all-plugins
 
 This repo is an example of a repo configured for full deployment (all wp core files, plugins and themes managed by git repo), with all of the requisite plugins required for the following GridPane panel functionality:
 - Nginx Page Caching
